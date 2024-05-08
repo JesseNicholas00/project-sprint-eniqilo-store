@@ -3,9 +3,9 @@ package dummy
 import (
 	"net/http"
 
-	svc "github.com/KerakTelor86/GoBoiler/services/dummy"
-	"github.com/KerakTelor86/GoBoiler/utils/logging"
-	"github.com/KerakTelor86/GoBoiler/utils/request"
+	svc "github.com/JesseNicholas00/EniqiloStore/services/dummy"
+	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
+	"github.com/JesseNicholas00/EniqiloStore/utils/request"
 	"github.com/labstack/echo/v4"
 )
 

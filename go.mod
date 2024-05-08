@@ -1,4 +1,4 @@
-module github.com/KerakTelor86/GoBoiler
+module github.com/JesseNicholas00/EniqiloStore
 
 go 1.21.1
 

@@ -1,6 +1,6 @@
 package dummy
 
-import dummyRepo "github.com/KerakTelor86/GoBoiler/repos/dummy"
+import dummyRepo "github.com/JesseNicholas00/EniqiloStore/repos/dummy"
 
 type dummyServiceImpl struct {
 	repo        dummyRepo.DummyRepository

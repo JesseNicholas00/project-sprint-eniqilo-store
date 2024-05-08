@@ -11,9 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/KerakTelor86/GoBoiler/utils/logging"
-	testingUtils "github.com/KerakTelor86/GoBoiler/utils/testing"
-	"github.com/KerakTelor86/GoBoiler/utils/validation"
+	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
+	testingUtils "github.com/JesseNicholas00/EniqiloStore/utils/testing"
+	"github.com/JesseNicholas00/EniqiloStore/utils/validation"
 	"github.com/labstack/echo/v4"
 )
 
