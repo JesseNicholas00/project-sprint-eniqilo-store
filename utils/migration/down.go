@@ -3,7 +3,7 @@ package migration
 import (
 	"errors"
 
-	"github.com/KerakTelor86/GoBoiler/utils/logging"
+	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
 	"github.com/golang-migrate/migrate/v4"
 )
 

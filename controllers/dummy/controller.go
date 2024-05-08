@@ -1,8 +1,8 @@
 package dummy
 
 import (
-	"github.com/KerakTelor86/GoBoiler/controllers"
-	svc "github.com/KerakTelor86/GoBoiler/services/dummy"
+	"github.com/JesseNicholas00/EniqiloStore/controllers"
+	svc "github.com/JesseNicholas00/EniqiloStore/services/dummy"
 	"github.com/labstack/echo/v4"
 )
 
