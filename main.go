@@ -5,10 +5,13 @@ import (
 	"net/url"
 
 	"github.com/JesseNicholas00/EniqiloStore/controllers"
+	customerCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/customer"
 	dummyCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/dummy"
 	productCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/product"
+	customerRepo "github.com/JesseNicholas00/EniqiloStore/repos/customer"
 	dummyRepo "github.com/JesseNicholas00/EniqiloStore/repos/dummy"
 	productRepo "github.com/JesseNicholas00/EniqiloStore/repos/product"
+	customerSvc "github.com/JesseNicholas00/EniqiloStore/services/customer"
 	dummySvc "github.com/JesseNicholas00/EniqiloStore/services/dummy"
 	productSvc "github.com/JesseNicholas00/EniqiloStore/services/product"
 	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
@@ -90,8 +93,13 @@ func initControllers(
 	productSvc := productSvc.NewProductService(productRepo)
 	productCtrl := productCtrl.NewProductController(productSvc)
 
+	customerRepo := customerRepo.NewCustomerRepository(db)
+	customerSvc := customerSvc.NewCustomerService(customerRepo)
+	customerCtrl := customerCtrl.NewCustomerController(customerSvc)
+
 	ctrls = append(ctrls, dummyCtrl)
 	ctrls = append(ctrls, productCtrl)
+	ctrls = append(ctrls, customerCtrl)
 
 	return
 }
