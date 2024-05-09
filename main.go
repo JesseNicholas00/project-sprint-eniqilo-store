@@ -5,11 +5,8 @@ import (
 	"net/url"
 
 	"github.com/JesseNicholas00/EniqiloStore/controllers"
-	dummyCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/dummy"
 	productCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/product"
-	dummyRepo "github.com/JesseNicholas00/EniqiloStore/repos/dummy"
 	productRepo "github.com/JesseNicholas00/EniqiloStore/repos/product"
-	dummySvc "github.com/JesseNicholas00/EniqiloStore/services/dummy"
 	productSvc "github.com/JesseNicholas00/EniqiloStore/services/product"
 	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
 	"github.com/JesseNicholas00/EniqiloStore/utils/migration"
@@ -82,15 +79,10 @@ func initControllers(
 		}
 	}()
 
-	dummyRepo := dummyRepo.NewDummyRepository(db)
-	dummySvc := dummySvc.NewDummyService(dummyRepo, cfg.bcryptSaltCost)
-	dummyCtrl := dummyCtrl.NewDummyController(dummySvc)
-
 	productRepo := productRepo.NewProductRepository(db)
 	productSvc := productSvc.NewProductService(productRepo)
 	productCtrl := productCtrl.NewProductController(productSvc)
 
-	ctrls = append(ctrls, dummyCtrl)
 	ctrls = append(ctrls, productCtrl)
 
 	return
