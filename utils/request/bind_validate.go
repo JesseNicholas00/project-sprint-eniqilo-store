@@ -16,20 +16,20 @@ func BindAndValidate[R any](
 ) error {
 	if err := ctx.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, echo.Map{
-			"error": "bad request format (hint: check parameter types)",
+			"message": "invalid request",
 		})
 	}
 
 	if err := ctx.Validate(req); err != nil {
 		if err, ok := err.(validator.ValidationErrors); ok {
 			return echo.NewHTTPError(http.StatusBadRequest, echo.Map{
-				"error": validation.ConvertToErrList(err),
+				"message": validation.ConvertToErrList(err),
 			})
 		}
 
 		logger.Printf("error while validating: %s", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, echo.Map{
-			"error": "internal server error",
+			"message": "internal server error",
 		})
 	}
 
