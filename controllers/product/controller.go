@@ -11,7 +11,7 @@ type productController struct {
 }
 
 func (ctrl *productController) Register(server *echo.Echo) error {
-	server.POST("/v1/product", ctrl.CreateProduct)
+	server.POST("/v1/product", ctrl.createProduct)
 	return nil
 }
 

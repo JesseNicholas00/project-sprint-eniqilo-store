@@ -10,3 +10,10 @@ func MustMarshalJson(obj interface{}) []byte {
 	}
 	return res
 }
+
+func MustUnmarshalJson(bytes []byte, res interface{}) {
+	err := json.Unmarshal(bytes, res)
+	if err != nil {
+		panic(err)
+	}
+}
