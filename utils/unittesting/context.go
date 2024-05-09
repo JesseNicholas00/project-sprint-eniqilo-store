@@ -10,28 +10,30 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/JesseNicholas00/EniqiloStore/utils/validation"
 	"github.com/labstack/echo/v4"
 )
 
 func CreateEchoContextFromRequest(
 	method string,
 	urlPath string,
+	recorder *httptest.ResponseRecorder,
 	options ...option,
 ) echo.Context {
 	e := echo.New()
+	e.Validator = validation.NewEchoValidator()
 
 	for _, option := range options {
 		option.urlTr(&urlPath)
 	}
 
 	req := httptest.NewRequest(method, urlPath, nil)
-	res := httptest.NewRecorder()
 
 	for _, option := range options {
 		option.reqTr(req)
 	}
 
-	ctx := e.NewContext(req, res)
+	ctx := e.NewContext(req, recorder)
 	// remove query params
 	ctx.SetPath(strings.Split(urlPath, "?")[0])
 

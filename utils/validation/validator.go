@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"github.com/JesseNicholas00/EniqiloStore/utils/validation/phone"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
@@ -13,8 +14,26 @@ func (e *EchoValidator) Validate(i interface{}) error {
 	return e.validator.Struct(i)
 }
 
+var customFields = []customField{
+	{
+		Tag:       "phoneNumber",
+		Validator: phone.ValidatePhoneNumber,
+	},
+}
+
+type customField struct {
+	Tag       string
+	Validator validator.Func
+}
+
 func NewEchoValidator() echo.Validator {
+	validator := validator.New(validator.WithRequiredStructEnabled())
+
+	for _, customField := range customFields {
+		validator.RegisterValidation(customField.Tag, customField.Validator)
+	}
+
 	return &EchoValidator{
-		validator: validator.New(validator.WithRequiredStructEnabled()),
+		validator: validator,
 	}
 }
