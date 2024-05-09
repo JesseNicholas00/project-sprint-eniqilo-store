@@ -12,6 +12,7 @@ type productController struct {
 
 func (ctrl *productController) Register(server *echo.Echo) error {
 	server.POST("/v1/product", ctrl.CreateProduct)
+	server.DELETE("/v1/product/:id", ctrl.DeleteProduct)
 	return nil
 }
 

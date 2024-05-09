@@ -16,3 +16,12 @@ type CreateProductRes struct {
 	ID        string `json:"id"`
 	CreatedAt string `json:"createdAt"`
 }
+
+type DeleteProductReq struct {
+	ID string `param:"id"        validate:"required"`
+}
+
+type DeleteProductRes struct {
+	Message      string `json:"message"`
+	RowsAffected int    `json:"rows_affected"`
+}

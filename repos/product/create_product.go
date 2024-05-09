@@ -7,6 +7,8 @@ var createProductRepoLogger = logging.GetLogger(
 	"createProduct",
 )
 
+var test string = "tet"
+
 func (repo *productRepositoryImpl) CreateProduct(product Product) (Product, error) {
 	insertQuery := `INSERT INTO products(
 			product_id,
