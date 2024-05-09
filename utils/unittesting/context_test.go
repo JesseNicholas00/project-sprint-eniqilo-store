@@ -3,6 +3,7 @@ package unittesting_test
 import (
 	"fmt"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -20,6 +21,7 @@ func TestCreateEchoContextFromRequest(t *testing.T) {
 				ctx := unittesting.CreateEchoContextFromRequest(
 					http.MethodGet,
 					testUrl,
+					&httptest.ResponseRecorder{},
 				)
 				Convey("The created context should be a GET", func() {
 					So(ctx.Request().Method, ShouldEqual, http.MethodGet)
@@ -36,6 +38,7 @@ func TestCreateEchoContextFromRequest(t *testing.T) {
 				ctx := unittesting.CreateEchoContextFromRequest(
 					http.MethodPost,
 					testUrl,
+					&httptest.ResponseRecorder{},
 				)
 				Convey("The created context should be a POST", func() {
 					So(ctx.Request().Method, ShouldEqual, http.MethodPost)
@@ -65,6 +68,7 @@ func TestWithPathParams(t *testing.T) {
 					ctx := unittesting.CreateEchoContextFromRequest(
 						http.MethodGet,
 						testUrl,
+						&httptest.ResponseRecorder{},
 						unittesting.WithPathParams(map[string]string{
 							"id":  id,
 							"num": fmt.Sprint(num),
@@ -115,6 +119,7 @@ func TestWithQueryParams(t *testing.T) {
 					ctx := unittesting.CreateEchoContextFromRequest(
 						http.MethodGet,
 						testUrl,
+						&httptest.ResponseRecorder{},
 						unittesting.WithQueryParams(map[string]string{
 							"id":  id,
 							"num": fmt.Sprint(num),
@@ -165,6 +170,7 @@ func TestWithFormPayload(t *testing.T) {
 					ctx := unittesting.CreateEchoContextFromRequest(
 						http.MethodPost,
 						testUrl,
+						&httptest.ResponseRecorder{},
 						unittesting.WithFormPayload(map[string]string{
 							"id":  id,
 							"num": fmt.Sprint(num),
@@ -215,6 +221,7 @@ func TestWithJsonPayload(t *testing.T) {
 					ctx := unittesting.CreateEchoContextFromRequest(
 						http.MethodPost,
 						testUrl,
+						&httptest.ResponseRecorder{},
 						unittesting.WithJsonPayload(map[string]interface{}{
 							"id":  id,
 							"num": num,
