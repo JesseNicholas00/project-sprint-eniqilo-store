@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/JesseNicholas00/EniqiloStore/services/auth"
@@ -29,11 +30,23 @@ func (ctrl *authController) loginStaff(c echo.Context) error {
 
 	var res auth.LoginStaffRes
 	if err := ctrl.service.LoginStaff(req, &res); err != nil {
-		loginProcessLogger.Printf("error while processing request: %s", err)
+		switch {
+		case errors.Is(err, auth.ErrUserNotFound):
+			return c.JSON(http.StatusNotFound, echo.Map{
+				"message": "user not found",
+			})
 
-		return c.JSON(http.StatusInternalServerError, echo.Map{
-			"message": "internal server error",
-		})
+		case errors.Is(err, auth.ErrInvalidCredentials):
+			return c.JSON(http.StatusBadRequest, echo.Map{
+				"message": "wrong password",
+			})
+
+		default:
+			loginProcessLogger.Printf("error while processing request: %s", err)
+			return c.JSON(http.StatusInternalServerError, echo.Map{
+				"message": "internal server error",
+			})
+		}
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{

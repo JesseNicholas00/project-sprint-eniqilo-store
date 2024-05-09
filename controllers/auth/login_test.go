@@ -13,10 +13,10 @@ import (
 )
 
 func TestLoginValid(t *testing.T) {
-	mockCtrl, controller, service := NewControllerWithMockedService(t)
-	defer mockCtrl.Finish()
-
 	Convey("When given a valid login request", t, func() {
+		mockCtrl, controller, service := NewControllerWithMockedService(t)
+		defer mockCtrl.Finish()
+
 		userId := "dummyId"
 		name := "namadepan namabelakang"
 		phoneNumber := "+1-2468123123123"
@@ -82,14 +82,34 @@ func TestLoginValid(t *testing.T) {
 }
 
 func TestLoginInvalid(t *testing.T) {
-	mockCtrl, controller, _ := NewControllerWithMockedService(t)
-	defer mockCtrl.Finish()
-
 	Convey("When given an invalid login request", t, func() {
-		// wrong phone number format
-		phoneNumber := "12468123123123"
-		password := "password"
+		mockCtrl, controller, service := NewControllerWithMockedService(t)
+		defer mockCtrl.Finish()
 
+		Convey("On bad request", func() {
+			// wrong phone number format
+			phoneNumber := "12468123123123"
+			password := "password"
+
+			rec := httptest.NewRecorder()
+			ctx := unittesting.CreateEchoContextFromRequest(
+				http.MethodPost,
+				"/v1/staff/login",
+				rec,
+				unittesting.WithJsonPayload(map[string]interface{}{
+					"phoneNumber": phoneNumber,
+					"password":    password,
+				}),
+			)
+
+			Convey("Should return HTTP code 400", func() {
+				unittesting.CallController(ctx, controller.loginStaff)
+				So(rec.Code, ShouldEqual, http.StatusBadRequest)
+			})
+		})
+
+		phoneNumber := "+1-2468123123123"
+		password := "password"
 		rec := httptest.NewRecorder()
 		ctx := unittesting.CreateEchoContextFromRequest(
 			http.MethodPost,
@@ -101,9 +121,41 @@ func TestLoginInvalid(t *testing.T) {
 			}),
 		)
 
-		Convey("Should return HTTP code 400", func() {
-			unittesting.CallController(ctx, controller.loginStaff)
-			So(rec.Code, ShouldEqual, http.StatusBadRequest)
+		expectedReq := auth.LoginStaffReq{
+			PhoneNumber: phoneNumber,
+			Password:    password,
+		}
+
+		Convey("On user not found", func() {
+			service.
+				EXPECT().
+				LoginStaff(expectedReq, gomock.Any()).
+				Return(auth.ErrUserNotFound).
+				Times(1)
+
+			Convey(
+				"Should return HTTP code 404",
+				func() {
+					unittesting.CallController(ctx, controller.loginStaff)
+					So(rec.Code, ShouldEqual, http.StatusNotFound)
+				},
+			)
+		})
+
+		Convey("On invalid credentials", func() {
+			service.
+				EXPECT().
+				LoginStaff(expectedReq, gomock.Any()).
+				Return(auth.ErrInvalidCredentials).
+				Times(1)
+
+			Convey(
+				"Should return HTTP code 404",
+				func() {
+					unittesting.CallController(ctx, controller.loginStaff)
+					So(rec.Code, ShouldEqual, http.StatusBadRequest)
+				},
+			)
 		})
 	})
 }

@@ -84,27 +84,63 @@ func TestRegisterValid(t *testing.T) {
 
 func TestRegisterInvalid(t *testing.T) {
 	Convey("When given an invalid register request", t, func() {
-		mockCtrl, controller, _ := NewControllerWithMockedService(t)
+		mockCtrl, controller, service := NewControllerWithMockedService(t)
 		defer mockCtrl.Finish()
 
+		name := "firstname lastname"
 		phoneNumber := "+1-2468123123123"
 		password := "password"
 
-		rec := httptest.NewRecorder()
-		ctx := unittesting.CreateEchoContextFromRequest(
-			http.MethodPost,
-			"/v1/staff/register",
-			rec,
-			unittesting.WithJsonPayload(map[string]interface{}{
-				// no name
-				"phoneNumber": phoneNumber,
-				"password":    password,
-			}),
-		)
+		Convey("On invalid request", func() {
+			phoneNumber := "+1-2468123123123"
+			password := "password"
 
-		Convey("Should return HTTP code 400", func() {
-			unittesting.CallController(ctx, controller.registerStaff)
-			So(rec.Code, ShouldEqual, http.StatusBadRequest)
+			rec := httptest.NewRecorder()
+			ctx := unittesting.CreateEchoContextFromRequest(
+				http.MethodPost,
+				"/v1/staff/register",
+				rec,
+				unittesting.WithJsonPayload(map[string]interface{}{
+					// no name
+					"phoneNumber": phoneNumber,
+					"password":    password,
+				}),
+			)
+
+			Convey("Should return HTTP code 400", func() {
+				unittesting.CallController(ctx, controller.registerStaff)
+				So(rec.Code, ShouldEqual, http.StatusBadRequest)
+			})
+		})
+
+		Convey("On duplicate phone number", func() {
+			rec := httptest.NewRecorder()
+			ctx := unittesting.CreateEchoContextFromRequest(
+				http.MethodPost,
+				"/v1/staff/register",
+				rec,
+				unittesting.WithJsonPayload(map[string]interface{}{
+					"name":        name,
+					"phoneNumber": phoneNumber,
+					"password":    password,
+				}),
+			)
+
+			Convey("Should return HTTP code 409", func() {
+				expectedReq := auth.RegisterStaffReq{
+					PhoneNumber: phoneNumber,
+					Name:        name,
+					Password:    password,
+				}
+
+				service.EXPECT().
+					RegisterStaff(expectedReq, gomock.Any()).
+					Return(auth.ErrPhoneNumberAlreadyRegistered).
+					Times(1)
+
+				unittesting.CallController(ctx, controller.registerStaff)
+				So(rec.Code, ShouldEqual, http.StatusConflict)
+			})
 		})
 	})
 }
