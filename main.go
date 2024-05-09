@@ -14,8 +14,6 @@ import (
 	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
 	"github.com/JesseNicholas00/EniqiloStore/utils/migration"
 	"github.com/JesseNicholas00/EniqiloStore/utils/validation"
-	_ "github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
@@ -107,12 +105,12 @@ func main() {
 	mainInitLogger.Printf("config loaded: %+v", cfg)
 
 	if cfg.migrateDownOnStart {
-		if err := migration.MigrateDown(cfg.dbString); err != nil {
+		if err := migration.MigrateDown(cfg.dbString, "migrations"); err != nil {
 			mainInitLogger.Fatalf("failed to migrate down db: %s", err)
 		}
 	}
 	if cfg.migrateUpOnStart {
-		if err := migration.MigrateUp(cfg.dbString); err != nil {
+		if err := migration.MigrateUp(cfg.dbString, "migrations"); err != nil {
 			mainInitLogger.Fatalf("failed to migrate up db: %s", err)
 		}
 	}

@@ -1,5 +1,5 @@
 CREATE TABLE staffs (
-    staff_id TEXT,
+    staff_id TEXT PRIMARY KEY,
     staff_name TEXT,
     staff_phone_number TEXT,
     staff_password TEXT,

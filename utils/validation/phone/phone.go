@@ -20,9 +20,7 @@ var countryCodesByLen = func() []map[string]struct{} {
 	return res
 }()
 
-func ValidatePhoneNumber(fl validator.FieldLevel) bool {
-	phoneNum := fl.Field().String()
-
+func validatePhoneNumberImpl(phoneNum string) bool {
 	// length check
 	if len(phoneNum) < 10 || len(phoneNum) > 16 {
 		return false
@@ -49,4 +47,8 @@ func ValidatePhoneNumber(fl validator.FieldLevel) bool {
 	}
 
 	return false
+}
+
+func ValidatePhoneNumber(fl validator.FieldLevel) bool {
+	return validatePhoneNumberImpl(fl.Field().String())
 }

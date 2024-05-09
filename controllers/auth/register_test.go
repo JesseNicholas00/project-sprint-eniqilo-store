@@ -13,10 +13,10 @@ import (
 )
 
 func TestRegisterValid(t *testing.T) {
-	mockCtrl, controller, service := NewControllerWithMockedService(t)
-	defer mockCtrl.Finish()
-
 	Convey("When given a valid register request", t, func() {
+		mockCtrl, controller, service := NewControllerWithMockedService(t)
+		defer mockCtrl.Finish()
+
 		userId := "dummyId"
 		name := "namadepan namabelakang"
 		phoneNumber := "+1-2468123123123"
@@ -83,10 +83,10 @@ func TestRegisterValid(t *testing.T) {
 }
 
 func TestRegisterInvalid(t *testing.T) {
-	mockCtrl, controller, _ := NewControllerWithMockedService(t)
-	defer mockCtrl.Finish()
-
 	Convey("When given an invalid register request", t, func() {
+		mockCtrl, controller, _ := NewControllerWithMockedService(t)
+		defer mockCtrl.Finish()
+
 		phoneNumber := "+1-2468123123123"
 		password := "password"
 
