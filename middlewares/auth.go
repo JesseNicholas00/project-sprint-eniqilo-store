@@ -12,6 +12,7 @@ import (
 
 type AuthMiddleware struct {
 	service auth.AuthService
+	binder  *echo.DefaultBinder
 }
 
 var authMwLogger = logging.GetLogger("authMiddleware")
@@ -22,7 +23,7 @@ func (mw *AuthMiddleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 			Bearer string `header:"Authorization"`
 		}{}
 
-		if err := c.Bind(&header); err != nil {
+		if err := mw.binder.BindHeaders(c, &header); err != nil {
 			return c.JSON(http.StatusBadRequest, echo.Map{
 				"message": "invalid request",
 			})
@@ -78,5 +79,6 @@ func (mw *AuthMiddleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 func NewAuthMiddleware(service auth.AuthService) *AuthMiddleware {
 	return &AuthMiddleware{
 		service: service,
+		binder:  &echo.DefaultBinder{},
 	}
 }

@@ -8,6 +8,7 @@ import (
 	authCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/auth"
 	dummyCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/dummy"
 	productCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/product"
+	"github.com/JesseNicholas00/EniqiloStore/middlewares"
 	authRepo "github.com/JesseNicholas00/EniqiloStore/repos/auth"
 	dummyRepo "github.com/JesseNicholas00/EniqiloStore/repos/dummy"
 	productRepo "github.com/JesseNicholas00/EniqiloStore/repos/product"
@@ -83,16 +84,6 @@ func initControllers(
 		}
 	}()
 
-	dummyRepo := dummyRepo.NewDummyRepository(db)
-	dummySvc := dummySvc.NewDummyService(dummyRepo, cfg.bcryptSaltCost)
-	dummyCtrl := dummyCtrl.NewDummyController(dummySvc)
-	ctrls = append(ctrls, dummyCtrl)
-
-	productRepo := productRepo.NewProductRepository(db)
-	productSvc := productSvc.NewProductService(productRepo)
-	productCtrl := productCtrl.NewProductController(productSvc)
-	ctrls = append(ctrls, productCtrl)
-
 	authRepo := authRepo.NewAuthRepository(db)
 	authSvc := authSvc.NewAuthService(
 		authRepo,
@@ -100,7 +91,18 @@ func initControllers(
 		cfg.bcryptSaltCost,
 	)
 	authCtrl := authCtrl.NewAuthController(authSvc)
+	authMw := middlewares.NewAuthMiddleware(authSvc)
 	ctrls = append(ctrls, authCtrl)
+
+	dummyRepo := dummyRepo.NewDummyRepository(db)
+	dummySvc := dummySvc.NewDummyService(dummyRepo, cfg.bcryptSaltCost)
+	dummyCtrl := dummyCtrl.NewDummyController(dummySvc)
+	ctrls = append(ctrls, dummyCtrl)
+
+	productRepo := productRepo.NewProductRepository(db)
+	productSvc := productSvc.NewProductService(productRepo)
+	productCtrl := productCtrl.NewProductController(productSvc, authMw)
+	ctrls = append(ctrls, productCtrl)
 
 	return
 }
