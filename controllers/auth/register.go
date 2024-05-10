@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/JesseNicholas00/EniqiloStore/services/auth"
@@ -29,11 +30,21 @@ func (ctrl *authController) registerStaff(c echo.Context) error {
 
 	var res auth.RegisterStaffRes
 	if err := ctrl.service.RegisterStaff(req, &res); err != nil {
-		registerProcessLogger.Printf("error while processing request: %s", err)
+		switch {
+		case errors.Is(err, auth.ErrPhoneNumberAlreadyRegistered):
+			return c.JSON(http.StatusConflict, echo.Map{
+				"message": "user already exists",
+			})
 
-		return c.JSON(http.StatusInternalServerError, echo.Map{
-			"message": "internal server error",
-		})
+		default:
+			registerProcessLogger.Printf(
+				"error while processing request: %s",
+				err,
+			)
+			return c.JSON(http.StatusInternalServerError, echo.Map{
+				"message": "internal server error",
+			})
+		}
 	}
 
 	return c.JSON(http.StatusCreated, echo.Map{

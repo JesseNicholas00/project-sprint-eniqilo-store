@@ -14,3 +14,8 @@ type Product struct {
 	CreatedAt string `db:"created_at"`
 	UpdatedAt string `db:"updated_at"`
 }
+
+type ProductDeleteResult struct {
+	Message      string
+	RowsAffected int
+}

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/JesseNicholas00/EniqiloStore/controllers/product/mocks"
+	"github.com/JesseNicholas00/EniqiloStore/middlewares"
 	"github.com/golang/mock/gomock"
 )
 
@@ -18,6 +19,6 @@ func NewControllerWithMockedService(
 ) {
 	mockCtrl = gomock.NewController(t)
 	mockedService = mocks.NewMockProductService(mockCtrl)
-	controller = NewProductController(mockedService).(*productController)
+	controller = NewProductController(mockedService, middlewares.NewNoopMiddleware()).(*productController)
 	return
 }
