@@ -14,7 +14,7 @@ type customerController struct {
 
 func (ctrl *customerController) Register(server *echo.Echo) error {
 	server.POST("/v1/customer/register", ctrl.CreateCustomer, ctrl.authMw.Process)
-	server.GET("/v1/customer", ctrl.ListCustomer)
+	server.GET("/v1/customer", ctrl.ListCustomer, ctrl.authMw.Process)
 	return nil
 }
 
