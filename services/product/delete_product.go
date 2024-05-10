@@ -13,7 +13,7 @@ func (svc *productServiceImpl) DeleteProduct(req DeleteProductReq, res *DeletePr
 	deleteRes, err := svc.repo.DeleteProduct(req.ID)
 	if err != nil {
 		deleteProductServiceLogger.Printf(
-			"error while createProduct() caused by: %s",
+			"error while deleteProduct() caused by: %s",
 			err,
 		)
 		return err

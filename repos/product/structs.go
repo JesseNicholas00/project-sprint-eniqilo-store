@@ -20,6 +20,11 @@ type ProductDeleteResult struct {
 	RowsAffected int
 }
 
+type ProductUpdateResult struct {
+	Message      string
+	RowsAffected int
+}
+
 type ProductFilter struct {
 	ProductID     string
 	Name          string
