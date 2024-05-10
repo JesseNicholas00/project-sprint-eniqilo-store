@@ -37,7 +37,7 @@ func (ctrl *productController) createProduct(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{
+	return c.JSON(http.StatusCreated, echo.Map{
 		"message": "success",
 		"data":    res,
 	})

@@ -58,7 +58,7 @@ func TestCreateProductValid(t *testing.T) {
 			Convey(
 				"Should return the expected response with HTTP 200",
 				func() {
-					So(rec.Code, ShouldEqual, http.StatusOK)
+					So(rec.Code, ShouldEqual, http.StatusCreated)
 
 					expectedBody := helper.MustMarshalJson(
 						map[string]interface{}{
