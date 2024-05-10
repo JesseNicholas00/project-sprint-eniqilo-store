@@ -20,6 +20,7 @@ func (svc *productServiceImpl) CreateProduct(req CreateProductReq, res *CreatePr
 		ImageUrl:  req.ImageUrl,
 		Notes:     req.Notes,
 		Price:     req.Price,
+		Stock:     req.Stock,
 		Location:  req.Location,
 		Available: req.Available,
 	}
