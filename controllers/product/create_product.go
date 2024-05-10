@@ -20,7 +20,7 @@ var createProductProcessLogger = logging.GetLogger(
 	"process",
 )
 
-func (ctrl *productController) CreateProduct(c echo.Context) error {
+func (ctrl *productController) createProduct(c echo.Context) error {
 	var req product.CreateProductReq
 	if err := request.BindAndValidate(c, &req, createProductBindLogger); err != nil {
 		return err
@@ -37,5 +37,8 @@ func (ctrl *productController) CreateProduct(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, res)
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": "success",
+		"data":    res,
+	})
 }
