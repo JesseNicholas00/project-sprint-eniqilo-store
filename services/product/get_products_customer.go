@@ -19,7 +19,7 @@ func (svc *productServiceImpl) GetProductsByCustomer(
 		Category:      req.Category,
 		SKU:           req.SKU,
 		PriceSort:     req.PriceSort,
-		CreatedAtSort: "asc",
+		CreatedAtSort: "desc",
 		Limit:         req.Limit,
 		InStock:       req.InStock,
 		Offset:        req.Offset,

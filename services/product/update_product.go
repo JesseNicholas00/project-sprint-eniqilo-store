@@ -20,7 +20,7 @@ func (svc *productServiceImpl) UpdateProduct(req UpdateProductReq, res *UpdatePr
 		Notes:     req.Notes,
 		Price:     req.Price,
 		Location:  req.Location,
-		Available: req.Available,
+		Available: *req.Available,
 	}
 	updateResult, err := svc.repo.UpdateProduct(product)
 	if err != nil {

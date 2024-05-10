@@ -31,11 +31,18 @@ func (ctrl *customerController) CreateCustomer(c echo.Context) error {
 		createCustomerProcessLogger.Printf(
 			"error while processing request: %s", err,
 		)
-
+		if err == customer.ErrPhoneNumberAlreadyRegistered {
+			return c.JSON(http.StatusConflict, echo.Map{
+				"message": "user already exists",
+			})
+		}
 		return c.JSON(http.StatusInternalServerError, echo.Map{
 			"error": "internal server error",
 		})
 	}
 
-	return c.JSON(http.StatusOK, res)
+	return c.JSON(http.StatusCreated, echo.Map{
+		"message": "success",
+		"data":    res,
+	})
 }

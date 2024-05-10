@@ -22,7 +22,7 @@ func (svc *productServiceImpl) CreateProduct(req CreateProductReq, res *CreatePr
 		Price:     req.Price,
 		Stock:     req.Stock,
 		Location:  req.Location,
-		Available: req.Available,
+		Available: *req.Available,
 	}
 	savedProduct, err := svc.repo.CreateProduct(product)
 	if err != nil {

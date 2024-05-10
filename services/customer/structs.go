@@ -6,7 +6,7 @@ type CreateCustomerReq struct {
 }
 
 type CreateCustomerRes struct {
-	UserID      string `json:"user_id"`
+	UserID      string `json:"userId"`
 	PhoneNumber string `json:"phoneNumber"`
 	Name        string `json:"name"`
 }

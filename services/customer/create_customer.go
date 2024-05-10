@@ -15,6 +15,12 @@ func (svc *customerServiceImpl) CreateCustomer(
 	req CreateCustomerReq,
 	res *CreateCustomerRes,
 ) error {
+	_, err := svc.repo.FindCustomerByPhoneNumber(req.PhoneNumber)
+
+	if err == nil {
+		// duplicate phone number
+		return ErrPhoneNumberAlreadyRegistered
+	}
 	product := customer.Customer{
 		CustomerID:  uuid.New().String(),
 		Name:        req.Name,
