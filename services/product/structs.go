@@ -18,7 +18,7 @@ type CreateProductRes struct {
 }
 
 type DeleteProductReq struct {
-	ID string `param:"id"        validate:"required"`
+	ID string `param:"id" validate:"required"`
 }
 
 type DeleteProductRes struct {
@@ -42,4 +42,45 @@ type UpdateProductReq struct {
 type UpdateProductRes struct {
 	Message      string `json:"message"`
 	RowsAffected int    `json:"rows_affected"`
+}
+
+type GetProductsReq struct {
+	Id             string `query:"id"`
+	Name           string `query:"name"`
+	AvailableInput string `query:"isAvailable"`
+	Available      *bool
+	Category       string `query:"category"`
+	SKU            string `query:"sku"`
+	PriceSort      string `query:"price"`
+	InStockInput   string `query:"inStock"`
+	InStock        *bool
+	CreatedAt      string `query:"createdAt"`
+	Limit          int    `query:"limit"`
+	Offset         int    `query:"offset"`
+}
+
+type GetProductsRes struct {
+	Id        string `json:"id"`
+	Name      string `json:"name"`
+	SKU       string `json:"sku"`
+	Category  string `json:"category"`
+	ImageUrl  string `json:"imageUrl"`
+	Stock     int    `json:"stock"`
+	Notes     string `json:"notes"`
+	Price     int    `json:"price"`
+	Location  string `json:"location"`
+	Available bool   `json:"isAvailable"`
+	CreatedAt string `json:"createdAt"`
+}
+
+type GetProductsByCustomerRes struct {
+	Id        string `json:"id"`
+	Name      string `json:"name"`
+	SKU       string `json:"sku"`
+	Category  string `json:"category"`
+	ImageUrl  string `json:"imageUrl"`
+	Stock     int    `json:"stock"`
+	Price     int    `json:"price"`
+	Location  string `json:"location"`
+	CreatedAt string `json:"createdAt"`
 }
