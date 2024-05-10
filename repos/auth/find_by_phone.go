@@ -28,6 +28,7 @@ func (repo *authRepostioryImpl) FindStaffByPhone(
 		)
 		return
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.StructScan(&res)

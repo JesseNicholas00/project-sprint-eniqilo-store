@@ -35,6 +35,7 @@ func (svc *authServiceImpl) LoginStaff(
 	token, err := svc.generateToken(staff)
 	if err != nil {
 		registerLogger.Printf("could not generate token: %s", err)
+		return err
 	}
 
 	*res = LoginStaffRes{
