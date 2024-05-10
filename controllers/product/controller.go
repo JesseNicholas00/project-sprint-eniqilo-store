@@ -17,6 +17,7 @@ func (ctrl *productController) Register(server *echo.Echo) error {
 	urlGroup.Use(ctrl.authMw.Process)
 	urlGroup.POST("", ctrl.createProduct)
 	urlGroup.DELETE("/:id", ctrl.DeleteProduct)
+	urlGroup.PUT("/:id", ctrl.UpdateProduct)
 	return nil
 }
 

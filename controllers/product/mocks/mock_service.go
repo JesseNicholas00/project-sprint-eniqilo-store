@@ -49,9 +49,17 @@ func (mr *MockProductServiceMockRecorder) CreateProduct(arg0, arg1 interface{}) 
 }
 
 // DeleteProduct mocks base method.
-func (m *MockProductService) DeleteProduct(arg0 product.DeleteProductReq, arg1 *product.DeleteProductRes) error {
+func (m *MockProductService) DeleteProduct(arg0 product.DeleteResultReq, arg1 *product.DeleteResultRes) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteProduct", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateProduct mocks base method.
+func (m *MockProductService) UpdateProduct(arg0 product.UpdateProductReq, arg1 *product.UpdateProductRes) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateProduct", arg0, arg1)
 	ret0, _ := ret[0].(error)
 	return ret0
 }

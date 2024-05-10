@@ -9,16 +9,16 @@ var deleteProductServiceLogger = logging.GetLogger(
 	"deleteProduct",
 )
 
-func (svc *productServiceImpl) DeleteProduct(req DeleteProductReq, res *DeleteProductRes) error {
+func (svc *productServiceImpl) DeleteProduct(req DeleteResultReq, res *DeleteResultRes) error {
 	deleteRes, err := svc.repo.DeleteProduct(req.ID)
 	if err != nil {
 		deleteProductServiceLogger.Printf(
-			"error while createProduct() caused by: %s",
+			"error while deleteProduct() caused by: %s",
 			err,
 		)
 		return err
 	}
-	*res = DeleteProductRes{
+	*res = DeleteResultRes{
 		Message:      deleteRes.Message,
 		RowsAffected: deleteRes.RowsAffected,
 	}

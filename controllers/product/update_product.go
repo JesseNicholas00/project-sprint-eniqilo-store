@@ -9,27 +9,27 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var deleteProductBindLogger = logging.GetLogger(
+var updateProductBindLogger = logging.GetLogger(
 	"productController",
-	"deleteProduct",
+	"updateProduct",
 	"bind",
 )
 
-var deleteProductProcessLogger = logging.GetLogger(
+var updateProductProcessLogger = logging.GetLogger(
 	"productController",
-	"deleteProduct",
+	"updateProduct",
 	"process",
 )
 
-func (ctrl *productController) DeleteProduct(c echo.Context) error {
-	var req product.DeleteResultReq
-	if err := request.BindAndValidate(c, &req, deleteProductProcessLogger); err != nil {
+func (ctrl *productController) UpdateProduct(c echo.Context) error {
+	var req product.UpdateProductReq
+	if err := request.BindAndValidate(c, &req, updateProductBindLogger); err != nil {
 		return err
 	}
 
-	var res product.DeleteResultRes
-	if err := ctrl.service.DeleteProduct(req, &res); err != nil {
-		deleteProductProcessLogger.Printf(
+	var res product.UpdateProductRes
+	if err := ctrl.service.UpdateProduct(req, &res); err != nil {
+		updateProductProcessLogger.Printf(
 			"error while processing request: %s", err,
 		)
 
