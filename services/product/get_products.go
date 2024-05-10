@@ -23,14 +23,29 @@ func (svc *productServiceImpl) GetProducts(req GetProductsReq, res *[]GetProduct
 		Limit:         req.Limit,
 		Offset:        req.Offset,
 	}
-	_, err := svc.repo.GetProducts(productFilter)
+	products, err := svc.repo.GetProducts(productFilter)
 	if err != nil {
 		getProductsServiceLogger.Printf(
-			"error while createProduct() caused by: %s",
+			"error while getProducts() caused by: %s",
 			err,
 		)
 		return err
 	}
-	// *res = &[]GetProductsRes
+	for _, product := range products {
+		productRes := GetProductsRes{
+			Id:        product.ProductID,
+			Name:      product.Name,
+			SKU:       product.SKU,
+			Category:  product.Category,
+			ImageUrl:  product.ImageUrl,
+			Stock:     product.Stock,
+			Notes:     product.Notes,
+			Price:     product.Price,
+			Location:  product.Location,
+			Available: product.Available,
+			CreatedAt: product.CreatedAt,
+		}
+		*res = append(*res, productRes)
+	}
 	return nil
 }

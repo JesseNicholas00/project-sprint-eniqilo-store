@@ -27,8 +27,8 @@ func (repo *productRepositoryImpl) GetProducts(productFilter ProductFilter) ([]P
 		parameters = append(parameters, productFilter.ProductID)
 	}
 	if productFilter.Name != "" {
-		conditions = append(conditions, "product_name = ILIKE '%?%'")
-		parameters = append(parameters, productFilter.Name)
+		conditions = append(conditions, "product_name ILIKE ?")
+		parameters = append(parameters, "%"+productFilter.Name+"%")
 	}
 	if productFilter.Category != "" {
 		conditions = append(conditions, "product_category= ?")
@@ -39,17 +39,20 @@ func (repo *productRepositoryImpl) GetProducts(productFilter ProductFilter) ([]P
 		parameters = append(parameters, productFilter.SKU)
 	}
 	if productFilter.Available != nil {
-		conditions = append(conditions, "product_available = ?")
+		conditions = append(conditions, "product_is_available = ?")
 		parameters = append(parameters, *productFilter.Available)
 	}
 	if productFilter.InStock != nil {
-		conditions = append(conditions, "product_in_stock = ?")
-		parameters = append(parameters, *productFilter.InStock)
+		if *productFilter.InStock {
+			conditions = append(conditions, "product_stock > 0")
+		} else {
+			conditions = append(conditions, "product_stock = 0")
+		}
 	}
 
 	position := 1
 	for idx, condition := range conditions {
-		conditions[idx] = strings.ReplaceAll(condition, "?", fmt.Sprintf("%d", position))
+		conditions[idx] = strings.ReplaceAll(condition, "?", fmt.Sprintf("$%d", position))
 		position++
 	}
 	if len(conditions) > 0 {
@@ -75,7 +78,6 @@ func (repo *productRepositoryImpl) GetProducts(productFilter ProductFilter) ([]P
 		productFilter.Limit,
 		productFilter.Offset,
 	)
-
 	rows, err := repo.db.Queryx(query, parameters...)
 	if err != nil {
 		getProductsRepoLogger.Printf("error while getProducts() caused by: %s", err)

@@ -51,6 +51,6 @@ type GetProductsRes struct {
 	Notes     string `json:"notes"`
 	Price     int    `json:"price"`
 	Location  string `json:"location"`
-	Available string `json:"isAvailable"`
+	Available bool   `json:"isAvailable"`
 	CreatedAt string `json:"createdAt"`
 }

@@ -9,12 +9,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var deleteProductBindLogger = logging.GetLogger(
-	"productController",
-	"deleteProduct",
-	"bind",
-)
-
 var deleteProductProcessLogger = logging.GetLogger(
 	"productController",
 	"deleteProduct",
@@ -29,7 +23,7 @@ func (ctrl *productController) DeleteProduct(c echo.Context) error {
 
 	var res product.DeleteProductRes
 	if err := ctrl.service.DeleteProduct(req, &res); err != nil {
-		createProductProcessLogger.Printf(
+		deleteProductProcessLogger.Printf(
 			"error while processing request: %s", err,
 		)
 

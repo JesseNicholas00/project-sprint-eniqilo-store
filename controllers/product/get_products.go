@@ -9,11 +9,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var getProductsBindLogger = logging.GetLogger(
-	"productController",
-	"getProducts",
-	"bind",
-)
 var getProductsProcessLogger = logging.GetLogger(
 	"productController",
 	"getProducts",
@@ -38,8 +33,8 @@ func (ctrl *productController) getProducts(c echo.Context) error {
 		req.Limit = 5
 	}
 	available, err := strconv.ParseBool(req.AvailableInput)
-	if err != nil {
-		*req.Available = available
+	if err == nil {
+		req.Available = &available
 	}
 	selectedCategory := ""
 	for _, category := range categories {
@@ -53,14 +48,14 @@ func (ctrl *productController) getProducts(c echo.Context) error {
 		req.PriceSort = ""
 	}
 	inStock, err := strconv.ParseBool(req.InStockInput)
-	if err != nil {
-		*req.InStock = inStock
+	if err == nil {
+		req.InStock = &inStock
 	}
 	if req.CreatedAt != "asc" && req.CreatedAt != "desc" {
 		req.CreatedAt = ""
 	}
 
-	var res []product.GetProductsRes
+	res := []product.GetProductsRes{}
 	if err := ctrl.service.GetProducts(req, &res); err != nil {
 		getProductsProcessLogger.Printf(
 			"error while processing request: %s", err,
