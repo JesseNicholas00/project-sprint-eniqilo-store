@@ -5,17 +5,19 @@ import (
 	"net/url"
 
 	"github.com/JesseNicholas00/EniqiloStore/controllers"
+	authCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/auth"
 	dummyCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/dummy"
 	productCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/product"
+	"github.com/JesseNicholas00/EniqiloStore/middlewares"
+	authRepo "github.com/JesseNicholas00/EniqiloStore/repos/auth"
 	dummyRepo "github.com/JesseNicholas00/EniqiloStore/repos/dummy"
 	productRepo "github.com/JesseNicholas00/EniqiloStore/repos/product"
+	authSvc "github.com/JesseNicholas00/EniqiloStore/services/auth"
 	dummySvc "github.com/JesseNicholas00/EniqiloStore/services/dummy"
 	productSvc "github.com/JesseNicholas00/EniqiloStore/services/product"
 	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
 	"github.com/JesseNicholas00/EniqiloStore/utils/migration"
 	"github.com/JesseNicholas00/EniqiloStore/utils/validation"
-	_ "github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
@@ -82,15 +84,24 @@ func initControllers(
 		}
 	}()
 
+	authRepo := authRepo.NewAuthRepository(db)
+	authSvc := authSvc.NewAuthService(
+		authRepo,
+		cfg.jwtSecretKey,
+		cfg.bcryptSaltCost,
+	)
+	authCtrl := authCtrl.NewAuthController(authSvc)
+	authMw := middlewares.NewAuthMiddleware(authSvc)
+	ctrls = append(ctrls, authCtrl)
+
 	dummyRepo := dummyRepo.NewDummyRepository(db)
 	dummySvc := dummySvc.NewDummyService(dummyRepo, cfg.bcryptSaltCost)
 	dummyCtrl := dummyCtrl.NewDummyController(dummySvc)
+	ctrls = append(ctrls, dummyCtrl)
 
 	productRepo := productRepo.NewProductRepository(db)
 	productSvc := productSvc.NewProductService(productRepo)
-	productCtrl := productCtrl.NewProductController(productSvc)
-
-	ctrls = append(ctrls, dummyCtrl)
+	productCtrl := productCtrl.NewProductController(productSvc, authMw)
 	ctrls = append(ctrls, productCtrl)
 
 	return
@@ -107,12 +118,12 @@ func main() {
 	mainInitLogger.Printf("config loaded: %+v", cfg)
 
 	if cfg.migrateDownOnStart {
-		if err := migration.MigrateDown(cfg.dbString); err != nil {
+		if err := migration.MigrateDown(cfg.dbString, "migrations"); err != nil {
 			mainInitLogger.Fatalf("failed to migrate down db: %s", err)
 		}
 	}
 	if cfg.migrateUpOnStart {
-		if err := migration.MigrateUp(cfg.dbString); err != nil {
+		if err := migration.MigrateUp(cfg.dbString, "migrations"); err != nil {
 			mainInitLogger.Fatalf("failed to migrate up db: %s", err)
 		}
 	}

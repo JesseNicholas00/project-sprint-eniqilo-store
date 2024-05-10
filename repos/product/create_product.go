@@ -7,7 +7,9 @@ var createProductRepoLogger = logging.GetLogger(
 	"createProduct",
 )
 
-func (repo *productRepositoryImpl) CreateProduct(product Product) (Product, error) {
+func (repo *productRepositoryImpl) CreateProduct(
+	product Product,
+) (Product, error) {
 	insertQuery := `INSERT INTO products(
 			product_id,
 			product_name,

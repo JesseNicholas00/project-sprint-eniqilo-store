@@ -2,15 +2,19 @@ package migration
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
 	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
-func MigrateUp(dbString string) error {
+func MigrateUp(dbString string, migrationsPath string) error {
 	migrationLogger := logging.GetLogger("migration", "up")
 
-	m, err := migrate.New("file://migrations", dbString)
+	sourceURL := fmt.Sprintf("file://%s", migrationsPath)
+	m, err := migrate.New(sourceURL, dbString)
 	if err != nil {
 		return err
 	}
