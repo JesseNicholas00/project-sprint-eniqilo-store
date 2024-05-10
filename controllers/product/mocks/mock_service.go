@@ -77,7 +77,7 @@ func (mr *MockProductServiceMockRecorder) GetProducts(arg0, arg1 interface{}) *g
 }
 
 // GetProductsByCustomer mocks base method.
-func (m *MockProductService) GetProductsByCustomer(arg0 product.GetProductsReq, arg1 *[]product.GetProductsRes) error {
+func (m *MockProductService) GetProductsByCustomer(arg0 product.GetProductsReq, arg1 *[]product.GetProductsByCustomerRes) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetProductsByCustomer", arg0, arg1)
 	ret0, _ := ret[0].(error)
