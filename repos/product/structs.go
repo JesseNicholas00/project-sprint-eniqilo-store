@@ -19,3 +19,7 @@ type ProductDeleteResult struct {
 	Message      string
 	RowsAffected int
 }
+
+type ProductUpdateResult struct {
+	RowsAffected int
+}
