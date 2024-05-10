@@ -1,6 +1,7 @@
 package product
 
 import (
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -73,6 +74,66 @@ func TestCreateProductValid(t *testing.T) {
 					)
 				},
 			)
+		})
+	})
+}
+
+func TestCreateProductInvalid(t *testing.T) {
+	Convey("When given an invalid create product request", t, func() {
+		mockCtrl, controller, service := NewControllerWithMockedService(t)
+		defer mockCtrl.Finish()
+
+		req := product.CreateProductReq{
+			Name:      "name",
+			SKU:       "sku",
+			Category:  "Clothing",
+			ImageUrl:  "http://www.google.com",
+			Notes:     "notes",
+			Price:     1,
+			Stock:     1,
+			Location:  "location",
+			Available: true,
+		}
+
+		Convey("On invalid request", func() {
+			// missing name
+			expectedReq := req
+			expectedReq.Name = ""
+
+			rec := httptest.NewRecorder()
+			ctx := unittesting.CreateEchoContextFromRequest(
+				http.MethodPost,
+				"/v1/product",
+				rec,
+				unittesting.WithJsonPayload(helper.StructToMap(expectedReq)),
+			)
+
+			Convey("Should return HTTP code 400", func() {
+				unittesting.CallController(ctx, controller.createProduct)
+				So(rec.Code, ShouldEqual, http.StatusBadRequest)
+			})
+		})
+
+		Convey("On internal server error", func() {
+			expectedReq := req
+			rec := httptest.NewRecorder()
+			ctx := unittesting.CreateEchoContextFromRequest(
+				http.MethodPost,
+				"/v1/staff/register",
+				rec,
+				unittesting.WithJsonPayload(helper.StructToMap(expectedReq)),
+			)
+
+			service.
+				EXPECT().
+				CreateProduct(expectedReq, gomock.Any()).
+				Return(errors.New("system error")).
+				Times(1)
+
+			Convey("Should return HTTP code 400", func() {
+				unittesting.CallController(ctx, controller.createProduct)
+				So(rec.Code, ShouldEqual, http.StatusInternalServerError)
+			})
 		})
 	})
 }

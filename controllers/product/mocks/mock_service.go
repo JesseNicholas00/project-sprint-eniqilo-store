@@ -56,8 +56,44 @@ func (m *MockProductService) DeleteProduct(arg0 product.DeleteProductReq, arg1 *
 	return ret0
 }
 
+// UpdateProduct mocks base method.
+func (m *MockProductService) UpdateProduct(arg0 product.UpdateProductReq, arg1 *product.UpdateProductRes) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateProduct", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
 // DeleteProduct indicates an expected call of DeleteProduct.
 func (mr *MockProductServiceMockRecorder) DeleteProduct(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteProduct", reflect.TypeOf((*MockProductService)(nil).DeleteProduct), arg0, arg1)
+}
+
+// GetProducts mocks base method.
+func (m *MockProductService) GetProducts(arg0 product.GetProductsReq, arg1 *[]product.GetProductsRes) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetProducts", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetProducts indicates an expected call of GetProducts.
+func (mr *MockProductServiceMockRecorder) GetProducts(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProducts", reflect.TypeOf((*MockProductService)(nil).GetProducts), arg0, arg1)
+}
+
+// GetProductsByCustomer mocks base method.
+func (m *MockProductService) GetProductsByCustomer(arg0 product.GetProductsReq, arg1 *[]product.GetProductsByCustomerRes) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetProductsByCustomer", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetProductsByCustomer indicates an expected call of GetProductsByCustomer.
+func (mr *MockProductServiceMockRecorder) GetProductsByCustomer(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProductsByCustomer", reflect.TypeOf((*MockProductService)(nil).GetProductsByCustomer), arg0, arg1)
 }

@@ -28,7 +28,6 @@ func (repo *productRepositoryImpl) DeleteProduct(id string) (ProductDeleteResult
 	}
 
 	res.RowsAffected = int(rowsAffected)
-	res.Message = "success"
 
 	return res, nil
 }

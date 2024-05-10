@@ -7,6 +7,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+var categories = []string{
+	"Clothing",
+	"Accessories",
+	"Footwear",
+	"Beverages",
+}
+
 type productController struct {
 	service product.ProductService
 	authMw  middlewares.Middleware
@@ -16,7 +23,12 @@ func (ctrl *productController) Register(server *echo.Echo) error {
 	urlGroup := server.Group("/v1/product")
 	urlGroup.Use(ctrl.authMw.Process)
 	urlGroup.POST("", ctrl.createProduct)
-	urlGroup.DELETE("/:id", ctrl.DeleteProduct)
+	urlGroup.GET("/customer", ctrl.getProductsByCustomer)
+	urlGroup.GET("", ctrl.getProducts, ctrl.authMw.Process)
+	urlGroup.POST("", ctrl.createProduct, ctrl.authMw.Process)
+	urlGroup.DELETE("/:id", ctrl.DeleteProduct, ctrl.authMw.Process)
+	urlGroup.PUT("/:id", ctrl.UpdateProduct, ctrl.authMw.Process)
+
 	return nil
 }
 
