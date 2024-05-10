@@ -10,14 +10,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type AuthMiddleware struct {
+type authMiddleware struct {
 	service auth.AuthService
 	binder  *echo.DefaultBinder
 }
 
 var authMwLogger = logging.GetLogger("authMiddleware")
 
-func (mw *AuthMiddleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
+func (mw *authMiddleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		header := struct {
 			Bearer string `header:"Authorization"`
@@ -76,8 +76,8 @@ func (mw *AuthMiddleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-func NewAuthMiddleware(service auth.AuthService) *AuthMiddleware {
-	return &AuthMiddleware{
+func NewAuthMiddleware(service auth.AuthService) Middleware {
+	return &authMiddleware{
 		service: service,
 		binder:  &echo.DefaultBinder{},
 	}

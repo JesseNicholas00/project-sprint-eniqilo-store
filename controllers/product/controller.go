@@ -9,7 +9,7 @@ import (
 
 type productController struct {
 	service product.ProductService
-	authMw  *middlewares.AuthMiddleware
+	authMw  middlewares.Middleware
 }
 
 func (ctrl *productController) Register(server *echo.Echo) error {
@@ -21,7 +21,7 @@ func (ctrl *productController) Register(server *echo.Echo) error {
 
 func NewProductController(
 	service product.ProductService,
-	authMw *middlewares.AuthMiddleware,
+	authMw middlewares.Middleware,
 ) controllers.Controller {
 	return &productController{
 		service: service,
