@@ -9,13 +9,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var getProductsProcessLogger = logging.GetLogger(
+var getProductsByCustomerProcessLogger = logging.GetLogger(
 	"productController",
-	"getProducts",
+	"getProductsByCustomer",
 	"process",
 )
 
-func (ctrl *productController) getProducts(c echo.Context) error {
+func (ctrl *productController) getProductsByCustomer(c echo.Context) error {
 	var req product.GetProductsReq
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, echo.Map{
@@ -44,13 +44,10 @@ func (ctrl *productController) getProducts(c echo.Context) error {
 	if err == nil {
 		req.InStock = &inStock
 	}
-	if req.CreatedAt != "asc" {
-		req.CreatedAt = "desc"
-	}
 
-	res := []product.GetProductsRes{}
-	if err := ctrl.service.GetProducts(req, &res); err != nil {
-		getProductsProcessLogger.Printf(
+	res := []product.GetProductsByCustomerRes{}
+	if err := ctrl.service.GetProductsByCustomer(req, &res); err != nil {
+		getProductsByCustomerProcessLogger.Printf(
 			"error while processing request: %s", err,
 		)
 

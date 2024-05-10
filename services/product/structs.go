@@ -54,3 +54,15 @@ type GetProductsRes struct {
 	Available bool   `json:"isAvailable"`
 	CreatedAt string `json:"createdAt"`
 }
+
+type GetProductsByCustomerRes struct {
+	Id        string `json:"id"`
+	Name      string `json:"name"`
+	SKU       string `json:"sku"`
+	Category  string `json:"category"`
+	ImageUrl  string `json:"imageUrl"`
+	Stock     int    `json:"stock"`
+	Price     int    `json:"price"`
+	Location  string `json:"location"`
+	CreatedAt string `json:"createdAt"`
+}

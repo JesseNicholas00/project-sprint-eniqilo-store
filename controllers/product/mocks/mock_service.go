@@ -75,3 +75,17 @@ func (mr *MockProductServiceMockRecorder) GetProducts(arg0, arg1 interface{}) *g
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProducts", reflect.TypeOf((*MockProductService)(nil).GetProducts), arg0, arg1)
 }
+
+// GetProductsByCustomer mocks base method.
+func (m *MockProductService) GetProductsByCustomer(arg0 product.GetProductsReq, arg1 *[]product.GetProductsRes) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetProductsByCustomer", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetProductsByCustomer indicates an expected call of GetProductsByCustomer.
+func (mr *MockProductServiceMockRecorder) GetProductsByCustomer(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProductsByCustomer", reflect.TypeOf((*MockProductService)(nil).GetProductsByCustomer), arg0, arg1)
+}
