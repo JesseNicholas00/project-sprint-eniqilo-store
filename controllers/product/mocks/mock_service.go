@@ -56,6 +56,14 @@ func (m *MockProductService) DeleteProduct(arg0 product.DeleteProductReq, arg1 *
 	return ret0
 }
 
+// UpdateProduct mocks base method.
+func (m *MockProductService) UpdateProduct(arg0 product.UpdateProductReq, arg1 *product.UpdateProductRes) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateProduct", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
 // DeleteProduct indicates an expected call of DeleteProduct.
 func (mr *MockProductServiceMockRecorder) DeleteProduct(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
