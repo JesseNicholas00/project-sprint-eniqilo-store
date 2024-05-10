@@ -34,6 +34,20 @@ func (m *MockAuthService) EXPECT() *MockAuthServiceMockRecorder {
 	return m.recorder
 }
 
+// GetSessionFromToken mocks base method.
+func (m *MockAuthService) GetSessionFromToken(arg0 auth.GetSessionFromTokenReq, arg1 *auth.GetSessionFromTokenRes) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSessionFromToken", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetSessionFromToken indicates an expected call of GetSessionFromToken.
+func (mr *MockAuthServiceMockRecorder) GetSessionFromToken(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSessionFromToken", reflect.TypeOf((*MockAuthService)(nil).GetSessionFromToken), arg0, arg1)
+}
+
 // LoginStaff mocks base method.
 func (m *MockAuthService) LoginStaff(arg0 auth.LoginStaffReq, arg1 *auth.LoginStaffRes) error {
 	m.ctrl.T.Helper()
