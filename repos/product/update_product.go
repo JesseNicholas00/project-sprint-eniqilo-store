@@ -40,7 +40,6 @@ func (repo *productRepositoryImpl) UpdateProduct(product Product) (ProductUpdate
 	}
 
 	res.RowsAffected = int(rowsAffected)
-	res.Message = "success"
 
 	return res, nil
 }

@@ -6,7 +6,7 @@ import (
 )
 
 var updateProductServiceLogger = logging.GetLogger(
-	"productRepo",
+	"productService",
 	"updateProduct",
 )
 

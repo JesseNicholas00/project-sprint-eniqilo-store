@@ -45,6 +45,6 @@ func (ctrl *productController) UpdateProduct(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"message": res.Message,
+		"message": "success",
 	})
 }

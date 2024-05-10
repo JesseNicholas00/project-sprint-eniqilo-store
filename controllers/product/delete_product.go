@@ -23,7 +23,7 @@ var deleteProductProcessLogger = logging.GetLogger(
 
 func (ctrl *productController) DeleteProduct(c echo.Context) error {
 	var req product.DeleteProductReq
-	if err := request.BindAndValidate(c, &req, deleteProductProcessLogger); err != nil {
+	if err := request.BindAndValidate(c, &req, deleteProductBindLogger); err != nil {
 		return err
 	}
 
@@ -45,6 +45,6 @@ func (ctrl *productController) DeleteProduct(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"message": res.Message,
+		"message": "success",
 	})
 }
