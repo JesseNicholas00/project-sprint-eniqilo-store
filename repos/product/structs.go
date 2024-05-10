@@ -19,3 +19,16 @@ type ProductDeleteResult struct {
 	Message      string
 	RowsAffected int
 }
+
+type ProductFilter struct {
+	ProductID     string
+	Name          string
+	Category      string
+	SKU           string
+	Available     *bool
+	InStock       *bool
+	PriceSort     string
+	CreatedAtSort string
+	Limit         int
+	Offset        int
+}
