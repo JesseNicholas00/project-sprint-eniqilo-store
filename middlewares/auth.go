@@ -24,7 +24,7 @@ func (mw *authMiddleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 		}{}
 
 		if err := mw.binder.BindHeaders(c, &header); err != nil {
-			return c.JSON(http.StatusBadRequest, echo.Map{
+			return c.JSON(http.StatusUnauthorized, echo.Map{
 				"message": "invalid request",
 			})
 		}
@@ -37,7 +37,7 @@ func (mw *authMiddleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 
 		splitByBearer := strings.Split(header.Bearer, "Bearer ")
 		if len(splitByBearer) != 2 {
-			return c.JSON(http.StatusBadRequest, echo.Map{
+			return c.JSON(http.StatusUnauthorized, echo.Map{
 				"message": "malformed bearer token",
 			})
 		}
@@ -50,7 +50,7 @@ func (mw *authMiddleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 		if err := mw.service.GetSessionFromToken(req, &res); err != nil {
 			switch {
 			case errors.Is(err, auth.ErrTokenInvalid):
-				return c.JSON(http.StatusBadRequest, echo.Map{
+				return c.JSON(http.StatusUnauthorized, echo.Map{
 					"message": "malformed bearer token",
 				})
 
