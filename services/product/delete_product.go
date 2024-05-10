@@ -9,7 +9,7 @@ var deleteProductServiceLogger = logging.GetLogger(
 	"deleteProduct",
 )
 
-func (svc *productServiceImpl) DeleteProduct(req DeleteResultReq, res *DeleteResultRes) error {
+func (svc *productServiceImpl) DeleteProduct(req DeleteProductReq, res *DeleteProductRes) error {
 	deleteRes, err := svc.repo.DeleteProduct(req.ID)
 	if err != nil {
 		deleteProductServiceLogger.Printf(
@@ -18,7 +18,7 @@ func (svc *productServiceImpl) DeleteProduct(req DeleteResultReq, res *DeleteRes
 		)
 		return err
 	}
-	*res = DeleteResultRes{
+	*res = DeleteProductRes{
 		Message:      deleteRes.Message,
 		RowsAffected: deleteRes.RowsAffected,
 	}

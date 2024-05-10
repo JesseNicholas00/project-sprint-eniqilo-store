@@ -22,12 +22,12 @@ var deleteProductProcessLogger = logging.GetLogger(
 )
 
 func (ctrl *productController) DeleteProduct(c echo.Context) error {
-	var req product.DeleteResultReq
+	var req product.DeleteProductReq
 	if err := request.BindAndValidate(c, &req, deleteProductProcessLogger); err != nil {
 		return err
 	}
 
-	var res product.DeleteResultRes
+	var res product.DeleteProductRes
 	if err := ctrl.service.DeleteProduct(req, &res); err != nil {
 		deleteProductProcessLogger.Printf(
 			"error while processing request: %s", err,
