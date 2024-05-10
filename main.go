@@ -109,7 +109,7 @@ func initControllers(
 
 	transactionRepo := transactionRepo.NewTransactionRepository(db)
 	transactionSvc := transactionSvc.NewTransactionService(transactionRepo, productRepo)
-	transactionCtrl := transactionCtrl.NewTransactionController(transactionSvc)
+	transactionCtrl := transactionCtrl.NewTransactionController(transactionSvc, authMw)
 	ctrls = append(ctrls, transactionCtrl)
 
 	return
