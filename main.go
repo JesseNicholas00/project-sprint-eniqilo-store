@@ -6,14 +6,14 @@ import (
 
 	"github.com/JesseNicholas00/EniqiloStore/controllers"
 	authCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/auth"
-	dummyCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/dummy"
+	customerCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/customer"
 	productCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/product"
 	"github.com/JesseNicholas00/EniqiloStore/middlewares"
 	authRepo "github.com/JesseNicholas00/EniqiloStore/repos/auth"
-	dummyRepo "github.com/JesseNicholas00/EniqiloStore/repos/dummy"
+	customerRepo "github.com/JesseNicholas00/EniqiloStore/repos/customer"
 	productRepo "github.com/JesseNicholas00/EniqiloStore/repos/product"
 	authSvc "github.com/JesseNicholas00/EniqiloStore/services/auth"
-	dummySvc "github.com/JesseNicholas00/EniqiloStore/services/dummy"
+	customerSvc "github.com/JesseNicholas00/EniqiloStore/services/customer"
 	productSvc "github.com/JesseNicholas00/EniqiloStore/services/product"
 	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
 	"github.com/JesseNicholas00/EniqiloStore/utils/migration"
@@ -94,15 +94,17 @@ func initControllers(
 	authMw := middlewares.NewAuthMiddleware(authSvc)
 	ctrls = append(ctrls, authCtrl)
 
-	dummyRepo := dummyRepo.NewDummyRepository(db)
-	dummySvc := dummySvc.NewDummyService(dummyRepo, cfg.bcryptSaltCost)
-	dummyCtrl := dummyCtrl.NewDummyController(dummySvc)
-	ctrls = append(ctrls, dummyCtrl)
-
 	productRepo := productRepo.NewProductRepository(db)
 	productSvc := productSvc.NewProductService(productRepo)
 	productCtrl := productCtrl.NewProductController(productSvc, authMw)
+
+	customerRepo := customerRepo.NewCustomerRepository(db)
+	customerSvc := customerSvc.NewCustomerService(customerRepo)
+	customerCtrl := customerCtrl.NewCustomerController(customerSvc)
+
+	ctrls = append(ctrls, customerCtrl)
 	ctrls = append(ctrls, productCtrl)
+	ctrls = append(ctrls, customerCtrl)
 
 	return
 }
