@@ -14,8 +14,12 @@ var listTransactionRepoLogger = logging.GetLogger(
 )
 
 // ListTransaction implements TransactionRepository.
-func (t *transactionRepositoryImpl) ListTransaction(customerId, createdAtSort string, limit int64, offset int64) ([]Transaction, error) {
-	if createdAtSort == "" {
+func (t *transactionRepositoryImpl) ListTransaction(
+	customerId, createdAtSort string,
+	limit int64,
+	offset int64,
+) ([]Transaction, error) {
+	if createdAtSort != "asc" && createdAtSort != "desc" {
 		createdAtSort = "desc"
 	}
 
@@ -41,7 +45,7 @@ func (t *transactionRepositoryImpl) ListTransaction(customerId, createdAtSort st
 
 	addCondition("customer_id = %s", customerId)
 
-	qwerty := fmt.Sprintf(
+	query := fmt.Sprintf(
 		`
             SELECT *
             FROM "transaction"
@@ -58,7 +62,7 @@ func (t *transactionRepositoryImpl) ListTransaction(customerId, createdAtSort st
 
 	values = append(values, limit, offset)
 
-	err := t.db.Select(&result, qwerty, values...)
+	err := t.db.Select(&result, query, values...)
 	if err != nil && err != sql.ErrNoRows {
 		listTransactionRepoLogger.Printf(
 			"error while listTraction() caused by: %s",

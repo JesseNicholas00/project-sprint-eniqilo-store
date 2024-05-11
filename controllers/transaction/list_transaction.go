@@ -22,9 +22,6 @@ var listTransactionProcessLogger = logging.GetLogger(
 )
 
 func (t *transactionController) ListTransaction(c echo.Context) error {
-	listTransactionProcessLogger.Printf(
-		"hello i proceess now",
-	)
 	var req transaction.ListTransactionReq
 	if err := request.BindAndValidate(c, &req, listTransactionBindLogger); err != nil {
 		return err

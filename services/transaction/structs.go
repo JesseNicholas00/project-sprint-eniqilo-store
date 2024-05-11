@@ -4,7 +4,7 @@ type ListTransactionReq struct {
 	CustomerId string `query:"customerId"`
 	Limit      int64  `query:"limit"`
 	Offset     int64  `query:"offset"`
-	CreatedAt  string `query:"createdAt" validate:"oneof=asc desc"`
+	CreatedAt  string `query:"createdAt"`
 }
 
 type ListTransactionRes struct {
