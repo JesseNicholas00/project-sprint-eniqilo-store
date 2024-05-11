@@ -21,9 +21,9 @@ type productController struct {
 
 func (ctrl *productController) Register(server *echo.Echo) error {
 	urlGroup := server.Group("/v1/product")
-	urlGroup.Use(ctrl.authMw.Process)
-	urlGroup.POST("", ctrl.createProduct)
+
 	urlGroup.GET("/customer", ctrl.getProductsByCustomer)
+
 	urlGroup.GET("", ctrl.getProducts, ctrl.authMw.Process)
 	urlGroup.POST("", ctrl.createProduct, ctrl.authMw.Process)
 	urlGroup.DELETE("/:id", ctrl.DeleteProduct, ctrl.authMw.Process)
