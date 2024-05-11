@@ -29,14 +29,14 @@ func (ctrl *customerController) CreateCustomer(c echo.Context) error {
 
 	var res customer.CreateCustomerRes
 	if err := ctrl.service.CreateCustomer(req, &res); err != nil {
-		createCustomerProcessLogger.Printf(
-			"error while processing request: %s", err,
-		)
 		if errors.Is(err, customer.ErrPhoneNumberAlreadyRegistered) {
 			return c.JSON(http.StatusConflict, echo.Map{
 				"message": "user already exists",
 			})
 		}
+		createCustomerProcessLogger.Printf(
+			"error while processing request: %s", err,
+		)
 		return c.JSON(http.StatusInternalServerError, echo.Map{
 			"error": "internal server error",
 		})

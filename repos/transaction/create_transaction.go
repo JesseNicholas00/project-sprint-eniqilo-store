@@ -60,7 +60,7 @@ func (repo *transactionRepositoryImpl) CreateTransaction(
 	var dbRes struct {
 		Transaction
 		DbProductIDs        pq.StringArray `db:"product_ids"`
-		DbProductQuantities pq.StringArray `db:"product_quantities"`
+		DbProductQuantities pq.Int64Array  `db:"product_quantities"`
 	}
 
 	for rows.Next() {
@@ -81,8 +81,12 @@ func (repo *transactionRepositoryImpl) CreateTransaction(
 		CreatedAt:     dbRes.CreatedAt,
 		UpdatedAt:     dbRes.UpdatedAt,
 	}
-	dbRes.DbProductIDs.Scan(&res.ProductIDs)
-	dbRes.DbProductQuantities.Scan(&res.ProductQuantities)
+	for _, productId := range dbRes.DbProductIDs {
+		res.ProductIDs = append(res.ProductIDs, productId)
+	}
+	for _, quantity := range dbRes.DbProductQuantities {
+		res.ProductQuantities = append(res.ProductQuantities, quantity)
+	}
 
 	return
 }
