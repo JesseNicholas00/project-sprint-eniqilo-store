@@ -34,6 +34,20 @@ func (m *MockProductService) EXPECT() *MockProductServiceMockRecorder {
 	return m.recorder
 }
 
+// CheckoutProduct mocks base method.
+func (m *MockProductService) CheckoutProduct(arg0 product.CheckoutProductReq, arg1 *product.CheckoutProductRes) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckoutProduct", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CheckoutProduct indicates an expected call of CheckoutProduct.
+func (mr *MockProductServiceMockRecorder) CheckoutProduct(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckoutProduct", reflect.TypeOf((*MockProductService)(nil).CheckoutProduct), arg0, arg1)
+}
+
 // CreateProduct mocks base method.
 func (m *MockProductService) CreateProduct(arg0 product.CreateProductReq, arg1 *product.CreateProductRes) error {
 	m.ctrl.T.Helper()
@@ -52,14 +66,6 @@ func (mr *MockProductServiceMockRecorder) CreateProduct(arg0, arg1 interface{}) 
 func (m *MockProductService) DeleteProduct(arg0 product.DeleteProductReq, arg1 *product.DeleteProductRes) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteProduct", arg0, arg1)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// UpdateProduct mocks base method.
-func (m *MockProductService) UpdateProduct(arg0 product.UpdateProductReq, arg1 *product.UpdateProductRes) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateProduct", arg0, arg1)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -96,4 +102,18 @@ func (m *MockProductService) GetProductsByCustomer(arg0 product.GetProductsReq, 
 func (mr *MockProductServiceMockRecorder) GetProductsByCustomer(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProductsByCustomer", reflect.TypeOf((*MockProductService)(nil).GetProductsByCustomer), arg0, arg1)
+}
+
+// UpdateProduct mocks base method.
+func (m *MockProductService) UpdateProduct(arg0 product.UpdateProductReq, arg1 *product.UpdateProductRes) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateProduct", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateProduct indicates an expected call of UpdateProduct.
+func (mr *MockProductServiceMockRecorder) UpdateProduct(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateProduct", reflect.TypeOf((*MockProductService)(nil).UpdateProduct), arg0, arg1)
 }

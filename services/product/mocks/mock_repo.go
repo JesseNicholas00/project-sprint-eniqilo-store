@@ -64,6 +64,21 @@ func (mr *MockProductRepositoryMockRecorder) DeleteProduct(arg0 interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteProduct", reflect.TypeOf((*MockProductRepository)(nil).DeleteProduct), arg0)
 }
 
+// GetProductById mocks base method.
+func (m *MockProductRepository) GetProductById(arg0 string) (product.Product, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetProductById", arg0)
+	ret0, _ := ret[0].(product.Product)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetProductById indicates an expected call of GetProductById.
+func (mr *MockProductRepositoryMockRecorder) GetProductById(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProductById", reflect.TypeOf((*MockProductRepository)(nil).GetProductById), arg0)
+}
+
 // GetProducts mocks base method.
 func (m *MockProductRepository) GetProducts(arg0 product.ProductFilter) ([]product.Product, error) {
 	m.ctrl.T.Helper()

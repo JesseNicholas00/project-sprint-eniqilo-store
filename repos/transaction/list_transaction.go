@@ -1,11 +1,11 @@
 package transaction
 
 import (
-	"database/sql"
 	"fmt"
 	"strings"
 
 	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
+	"github.com/lib/pq"
 )
 
 var listTransactionRepoLogger = logging.GetLogger(
@@ -43,18 +43,25 @@ func (t *transactionRepositoryImpl) ListTransaction(
 		values = append(values, value)
 	}
 
-	addCondition("customer_id = %s", customerId)
+	if customerId != "" {
+		addCondition("customer_id = %s", customerId)
+	}
+
+	whereClause := ""
+	if len(conditions) != 0 {
+		whereClause = strings.Join(conditions, " AND ")
+	}
 
 	query := fmt.Sprintf(
 		`
             SELECT *
             FROM "transaction"
-            WHERE %s
+            %s
             ORDER BY created_at %s
             LIMIT %s
             OFFSET %s
         `,
-		strings.Join(conditions, " AND "),
+		whereClause,
 		createdAtSort,
 		getPlaceholder(),
 		getPlaceholder(),
@@ -62,13 +69,44 @@ func (t *transactionRepositoryImpl) ListTransaction(
 
 	values = append(values, limit, offset)
 
-	err := t.db.Select(&result, query, values...)
-	if err != nil && err != sql.ErrNoRows {
+	var dbRes struct {
+		Transaction
+		DbProductIDs        pq.StringArray `db:"product_ids"`
+		DbProductQuantities pq.Int64Array  `db:"product_quantities"`
+	}
+
+	rows, err := t.db.Queryx(query, values...)
+
+	if err != nil {
 		listTransactionRepoLogger.Printf(
-			"error while listTraction() caused by: %s",
+			"could not execute query: %s",
 			err,
 		)
-		return result, err
+	}
+
+	for rows.Next() {
+		if err = rows.StructScan(&dbRes); err != nil {
+			listTransactionRepoLogger.Printf(
+				"could not parse result into struct: %s",
+				err,
+			)
+			return result, err
+		}
+		res := Transaction{
+			TransactionID: dbRes.TransactionID,
+			CustomerID:    dbRes.CustomerID,
+			Paid:          dbRes.Paid,
+			Change:        dbRes.Change,
+			CreatedAt:     dbRes.CreatedAt,
+			UpdatedAt:     dbRes.UpdatedAt,
+		}
+		for _, productId := range dbRes.DbProductIDs {
+			res.ProductIDs = append(res.ProductIDs, productId)
+		}
+		for _, quantity := range dbRes.DbProductQuantities {
+			res.ProductQuantities = append(res.ProductQuantities, quantity)
+		}
+		result = append(result, res)
 	}
 
 	return result, nil

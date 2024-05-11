@@ -84,3 +84,20 @@ type GetProductsByCustomerRes struct {
 	Location  string `json:"location"`
 	CreatedAt string `json:"createdAt"`
 }
+
+type CheckoutProductReq struct {
+	CustomerId     string          `json:"customerId"     validate:"required"`
+	ProductDetails []ProductDetail `json:"productDetails" validate:"required,min=1,dive"`
+	Paid           int64           `json:"paid"           validate:"required,min=1"`
+	Change         *int64          `json:"change"         validate:"required,min=0"`
+}
+
+type ProductDetail struct {
+	ProductId string `json:"productId" validate:"required"`
+	Quantity  int    `json:"quantity"  validate:"required,min=1"`
+}
+
+type CheckoutProductRes struct {
+	ProductId string `json:"productId"`
+	TotalCost int64  `json:"totalCost"`
+}
