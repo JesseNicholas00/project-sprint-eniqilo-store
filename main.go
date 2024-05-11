@@ -104,7 +104,7 @@ func initControllers(
 
 	customerRepo := customerRepo.NewCustomerRepository(db)
 	customerSvc := customerSvc.NewCustomerService(customerRepo)
-	customerCtrl := customerCtrl.NewCustomerController(customerSvc)
+	customerCtrl := customerCtrl.NewCustomerController(customerSvc, authMw)
 	ctrls = append(ctrls, customerCtrl)
 
 	transactionRepo := transactionRepo.NewTransactionRepository(db)
