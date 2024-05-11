@@ -69,7 +69,7 @@ func (svc *productServiceImpl) CheckoutProduct(
 	}
 
 	expectedChange := req.Paid - totalCost
-	if req.Change != expectedChange {
+	if *req.Change != expectedChange {
 		return ErrIncorrectChange
 	}
 

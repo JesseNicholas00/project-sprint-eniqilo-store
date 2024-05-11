@@ -89,7 +89,7 @@ type CheckoutProductReq struct {
 	CustomerId     string          `json:"customerId"     validate:"required"`
 	ProductDetails []ProductDetail `json:"productDetails" validate:"required,min=1,dive"`
 	Paid           int64           `json:"paid"           validate:"required,min=1"`
-	Change         int64           `json:"change"         validate:"required,min=0"`
+	Change         *int64          `json:"change"         validate:"required,min=0"`
 }
 
 type ProductDetail struct {
