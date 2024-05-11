@@ -15,11 +15,6 @@ var listCustomerRepoLogger = logging.GetLogger(
 func (repo *customerRepositoryImpl) ListCustomer(
 	customerName, customerPhoneNumber string,
 ) ([]Customer, error) {
-	listCustomerRepoLogger.Printf(
-		"start ListCustomer() with customerName: %s and customerPhoneNumber: %s",
-		customerName, customerPhoneNumber,
-	)
-
 	var customers []Customer
 
 	position := 1
