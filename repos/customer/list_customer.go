@@ -1,7 +1,8 @@
 package customer
 
 import (
-	"database/sql"
+	"fmt"
+	"strings"
 
 	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
 )
@@ -11,46 +12,44 @@ var listCustomerRepoLogger = logging.GetLogger(
 	"listCustomer",
 )
 
-func (repo *customerRepositoryImpl) ListCustomer(customerName, customerPhoneNumber string) ([]Customer, error) {
-	listCustomerRepoLogger.Printf(
-		"start ListCustomer() with customerName: %s and customerPhoneNumber: %s",
-		customerName, customerPhoneNumber,
-	)
+func (repo *customerRepositoryImpl) ListCustomer(
+	customerName, customerPhoneNumber string,
+) ([]Customer, error) {
+	var customers []Customer
 
-	res := []Customer{}
-	insertQuery := `SELECT *
-	FROM customers`
+	position := 1
+	var conditions []string
+	var parameters []interface{}
 
-	plhdr := 1
-	wheres := []string{}
-	args := []string{}
 	if customerName != "" {
-		wheres = append(wheres, `customer_name ilike '\%$`+string(plhdr)+`\%'`)
-		args = append(args, customerName)
-		plhdr++
+		conditions = append(conditions, fmt.Sprintf("customer_name ILIKE $%d", position))
+		parameters = append(parameters, "%"+customerName+"%")
 	}
 	if customerPhoneNumber != "" {
-		wheres = append(wheres, `customer_phone_number like '\%$+string(plhdr)+\%'`)
-		args = append(args, customerPhoneNumber)
-		plhdr++
+		conditions = append(conditions, fmt.Sprintf("customer_phone_number ILIKE $%d", position))
+		parameters = append(parameters, "+"+customerPhoneNumber+"%")
 	}
-	for i := 0; i < len(wheres); i++ {
-		if i == 0 {
-			insertQuery = insertQuery + `
-			WHERE ` + wheres[i]
-		} else {
-			insertQuery = insertQuery + `
-			AND ` + wheres[i]
-		}
+	conditionalQuery := ""
+	if len(conditions) > 0 {
+		conditionalQuery = "WHERE " + strings.Join(conditions, " AND ")
 	}
-	err := repo.db.Select(res, insertQuery, args)
+	query := "SELECT * FROM customers " + conditionalQuery + " ORDER BY created_at DESC"
+	rows, err := repo.db.Queryx(query, parameters...)
 
-	if err != nil && err != sql.ErrNoRows {
-		listCustomerRepoLogger.Printf(
-			"error while ListCustomer() caused by: %s",
-			err,
-		)
-		return res, err
+	if err != nil {
+		listCustomerRepoLogger.Printf("error while listCustomer() caused by: %s", err)
+		return []Customer{}, err
 	}
-	return res, nil
+	defer rows.Close()
+	for rows.Next() {
+		customer := Customer{}
+		err := rows.StructScan(&customer)
+		if err != nil {
+			listCustomerRepoLogger.Printf("error while listCustomer() caused by: %s", err)
+			return nil, err
+		}
+		customers = append(customers, customer)
+	}
+
+	return customers, nil
 }

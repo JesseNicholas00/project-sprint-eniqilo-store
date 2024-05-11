@@ -2,7 +2,7 @@ package customer
 
 type CreateCustomerReq struct {
 	Name        string `json:"name"        validate:"required,min=5,max=50"`
-	PhoneNumber string `json:"phoneNumber" validate:"required,e164"`
+	PhoneNumber string `json:"phoneNumber" validate:"required,phoneNumber"`
 }
 
 type CreateCustomerRes struct {
@@ -12,8 +12,8 @@ type CreateCustomerRes struct {
 }
 
 type ListCustomerReq struct {
-	Name        string `json:"name"`
-	PhoneNumber string `json:"phoneNumber"`
+	Name        string `query:"name"`
+	PhoneNumber string `query:"phoneNumber"`
 }
 
 type ListCustomerRes struct {
@@ -21,7 +21,7 @@ type ListCustomerRes struct {
 }
 
 type CustomerDTO struct {
-	UserId      string `db:"userId"`
-	PhoneNumber string `db:"phone_number"`
-	Name        string `db:"name"`
+	UserId      string `json:"userId"`
+	PhoneNumber string `json:"phoneNumber"`
+	Name        string `json:"name"`
 }
