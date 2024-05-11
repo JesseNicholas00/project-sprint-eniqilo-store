@@ -28,6 +28,7 @@ func (ctrl *productController) Register(server *echo.Echo) error {
 	urlGroup.POST("", ctrl.createProduct, ctrl.authMw.Process)
 	urlGroup.DELETE("/:id", ctrl.DeleteProduct, ctrl.authMw.Process)
 	urlGroup.PUT("/:id", ctrl.UpdateProduct, ctrl.authMw.Process)
+	urlGroup.POST("/checkout", ctrl.checkoutProduct, ctrl.authMw.Process)
 
 	return nil
 }
