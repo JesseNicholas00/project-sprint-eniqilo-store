@@ -13,7 +13,7 @@ func TestCreateProduct(t *testing.T) {
 	Convey("When create product", t, func() {
 		mockCtrl, service, mockedRepo := NewWithMockedRepo(t)
 		defer mockCtrl.Finish()
-
+		available := true
 		req := CreateProductReq{
 			Name:      "name",
 			SKU:       "sku",
@@ -23,7 +23,7 @@ func TestCreateProduct(t *testing.T) {
 			Price:     1,
 			Stock:     1,
 			Location:  "location",
-			Available: true,
+			Available: &available,
 		}
 
 		unittesting.FixNextUuid()

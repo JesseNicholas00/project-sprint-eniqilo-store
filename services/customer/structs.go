@@ -12,8 +12,8 @@ type CreateCustomerRes struct {
 }
 
 type ListCustomerReq struct {
-	Name        string `json:"name"`
-	PhoneNumber string `json:"phoneNumber"`
+	Name        string `query:"name"`
+	PhoneNumber string `query:"phoneNumber"`
 }
 
 type ListCustomerRes struct {
