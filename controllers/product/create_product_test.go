@@ -18,16 +18,17 @@ func TestCreateProductValid(t *testing.T) {
 	defer mockCtrl.Finish()
 
 	Convey("When given a valid create product", t, func() {
+		available := true
 		req := product.CreateProductReq{
 			Name:      "name",
 			SKU:       "sku",
 			Category:  "Clothing",
-			ImageUrl:  "http://www.google.com",
+			ImageUrl:  "http://www.google.com/image.png",
 			Notes:     "notes",
 			Price:     1,
 			Stock:     1,
 			Location:  "location",
-			Available: true,
+			Available: &available,
 		}
 		rec := httptest.NewRecorder()
 		ctx := unittesting.CreateEchoContextFromRequest(
@@ -82,17 +83,17 @@ func TestCreateProductInvalid(t *testing.T) {
 	Convey("When given an invalid create product request", t, func() {
 		mockCtrl, controller, service := NewControllerWithMockedService(t)
 		defer mockCtrl.Finish()
-
+		available := true
 		req := product.CreateProductReq{
 			Name:      "name",
 			SKU:       "sku",
 			Category:  "Clothing",
-			ImageUrl:  "http://www.google.com",
+			ImageUrl:  "http://www.google.com/image.png",
 			Notes:     "notes",
 			Price:     1,
 			Stock:     1,
 			Location:  "location",
-			Available: true,
+			Available: &available,
 		}
 
 		Convey("On invalid request", func() {
