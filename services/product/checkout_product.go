@@ -5,6 +5,7 @@ import (
 
 	"github.com/JesseNicholas00/EniqiloStore/repos/customer"
 	"github.com/JesseNicholas00/EniqiloStore/repos/product"
+	"github.com/JesseNicholas00/EniqiloStore/repos/transaction"
 	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
 )
 
@@ -28,8 +29,10 @@ func (svc *productServiceImpl) CheckoutProduct(
 	}
 
 	var productIds []string
+	var productQuantities []int64
 	for _, detail := range req.ProductDetails {
 		productIds = append(productIds, detail.ProductId)
+		productQuantities = append(productQuantities, int64(detail.Quantity))
 	}
 
 	products, err := svc.repo.ListProductByIds(productIds)
@@ -92,6 +95,17 @@ func (svc *productServiceImpl) CheckoutProduct(
 			)
 			return ErrFailedToUpdate
 		}
+	}
+
+	_, err = svc.trxRepo.CreateTransaction(transaction.Transaction{
+		CustomerID:        req.CustomerId,
+		ProductIDs:        productIds,
+		ProductQuantities: productQuantities,
+		Paid:              req.Paid,
+		Change:            *req.Change,
+	})
+	if err != nil {
+		checkoutProductLogger.Printf("could not log transaction: %s", err)
 	}
 
 	return nil

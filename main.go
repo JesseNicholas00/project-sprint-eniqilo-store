@@ -98,25 +98,31 @@ func initControllers(
 	ctrls = append(ctrls, authCtrl)
 
 	customerRepo := customerRepo.NewCustomerRepository(db)
-	customerSvc := customerSvc.NewCustomerService(customerRepo)
-	customerCtrl := customerCtrl.NewCustomerController(customerSvc, authMw)
-	ctrls = append(ctrls, customerCtrl)
-
 	productRepo := productRepo.NewProductRepository(db)
-	productSvc := productSvc.NewProductService(productRepo, customerRepo)
-	productCtrl := productCtrl.NewProductController(productSvc, authMw)
-	ctrls = append(ctrls, productCtrl)
-
 	transactionRepo := transactionRepo.NewTransactionRepository(db)
+
+	customerSvc := customerSvc.NewCustomerService(customerRepo)
 	transactionSvc := transactionSvc.NewTransactionService(
 		transactionRepo,
 		productRepo,
 	)
+	productSvc := productSvc.NewProductService(
+		productRepo,
+		customerRepo,
+		transactionRepo,
+	)
+
+	customerCtrl := customerCtrl.NewCustomerController(customerSvc, authMw)
+	ctrls = append(ctrls, customerCtrl)
+
 	transactionCtrl := transactionCtrl.NewTransactionController(
 		transactionSvc,
 		authMw,
 	)
 	ctrls = append(ctrls, transactionCtrl)
+
+	productCtrl := productCtrl.NewProductController(productSvc, authMw)
+	ctrls = append(ctrls, productCtrl)
 
 	return
 }
