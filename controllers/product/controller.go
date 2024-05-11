@@ -24,7 +24,6 @@ func (ctrl *productController) Register(server *echo.Echo) error {
 
 	urlGroup.GET("/customer", ctrl.getProductsByCustomer)
 
-	urlGroup.POST("", ctrl.createProduct, ctrl.authMw.Process)
 	urlGroup.GET("", ctrl.getProducts, ctrl.authMw.Process)
 	urlGroup.POST("", ctrl.createProduct, ctrl.authMw.Process)
 	urlGroup.DELETE("/:id", ctrl.DeleteProduct, ctrl.authMw.Process)
