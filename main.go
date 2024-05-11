@@ -8,13 +8,16 @@ import (
 	authCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/auth"
 	customerCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/customer"
 	productCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/product"
+	transactionCtrl "github.com/JesseNicholas00/EniqiloStore/controllers/transaction"
 	"github.com/JesseNicholas00/EniqiloStore/middlewares"
 	authRepo "github.com/JesseNicholas00/EniqiloStore/repos/auth"
 	customerRepo "github.com/JesseNicholas00/EniqiloStore/repos/customer"
 	productRepo "github.com/JesseNicholas00/EniqiloStore/repos/product"
+	transactionRepo "github.com/JesseNicholas00/EniqiloStore/repos/transaction"
 	authSvc "github.com/JesseNicholas00/EniqiloStore/services/auth"
 	customerSvc "github.com/JesseNicholas00/EniqiloStore/services/customer"
 	productSvc "github.com/JesseNicholas00/EniqiloStore/services/product"
+	transactionSvc "github.com/JesseNicholas00/EniqiloStore/services/transaction"
 	"github.com/JesseNicholas00/EniqiloStore/utils/logging"
 	"github.com/JesseNicholas00/EniqiloStore/utils/migration"
 	"github.com/JesseNicholas00/EniqiloStore/utils/validation"
@@ -103,6 +106,11 @@ func initControllers(
 	customerSvc := customerSvc.NewCustomerService(customerRepo)
 	customerCtrl := customerCtrl.NewCustomerController(customerSvc, authMw)
 	ctrls = append(ctrls, customerCtrl)
+
+	transactionRepo := transactionRepo.NewTransactionRepository(db)
+	transactionSvc := transactionSvc.NewTransactionService(transactionRepo, productRepo)
+	transactionCtrl := transactionCtrl.NewTransactionController(transactionSvc, authMw)
+	ctrls = append(ctrls, transactionCtrl)
 
 	return
 }

@@ -5,4 +5,5 @@ type ProductRepository interface {
 	DeleteProduct(id string) (ProductDeleteResult, error)
 	UpdateProduct(Product Product) (ProductUpdateResult, error)
 	GetProducts(productFilter ProductFilter) ([]Product, error)
+	ListProductByIds(id []string) ([]Product, error)
 }
