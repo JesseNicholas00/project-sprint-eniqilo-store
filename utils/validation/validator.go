@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"github.com/JesseNicholas00/EniqiloStore/utils/validation/image"
 	"github.com/JesseNicholas00/EniqiloStore/utils/validation/phone"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -18,6 +19,10 @@ var customFields = []customField{
 	{
 		Tag:       "phoneNumber",
 		Validator: phone.ValidatePhoneNumber,
+	},
+	{
+		Tag:       "imageExtension",
+		Validator: image.ValidateImageExtension,
 	},
 }
 

@@ -10,3 +10,18 @@ type CreateCustomerRes struct {
 	PhoneNumber string `json:"phoneNumber"`
 	Name        string `json:"name"`
 }
+
+type ListCustomerReq struct {
+	Name        string `json:"name"`
+	PhoneNumber string `json:"phoneNumber"`
+}
+
+type ListCustomerRes struct {
+	Data []CustomerDTO `json:"data"`
+}
+
+type CustomerDTO struct {
+	UserId      string `db:"userId"`
+	PhoneNumber string `db:"phone_number"`
+	Name        string `db:"name"`
+}
