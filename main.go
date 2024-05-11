@@ -152,6 +152,9 @@ func main() {
 	if err != nil {
 		mainInitLogger.Fatal(err)
 	}
+	db.SetMaxOpenConns(20)
+	db.SetMaxIdleConns(10)
+	db.SetConnMaxLifetime(0)
 	defer db.Close()
 
 	controllers := initControllers(cfg, db)
