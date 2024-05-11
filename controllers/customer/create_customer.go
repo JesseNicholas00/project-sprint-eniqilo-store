@@ -1,6 +1,7 @@
 package customer
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/JesseNicholas00/EniqiloStore/services/customer"
@@ -31,7 +32,7 @@ func (ctrl *customerController) CreateCustomer(c echo.Context) error {
 		createCustomerProcessLogger.Printf(
 			"error while processing request: %s", err,
 		)
-		if err == customer.ErrPhoneNumberAlreadyRegistered {
+		if errors.Is(err, customer.ErrPhoneNumberAlreadyRegistered) {
 			return c.JSON(http.StatusConflict, echo.Map{
 				"message": "user already exists",
 			})
